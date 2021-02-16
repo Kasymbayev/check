@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="slide">
-      <img :src="require('../assets/' + slides[currentSlideIndex] + '.jpg')" alt="">
+      <img :src="require('../assets/' + slide[currentSlideIndex] + '.jpg')" alt="">
     </div>
   </div>
 </template>
