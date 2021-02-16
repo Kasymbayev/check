@@ -10,6 +10,7 @@
   "dependencies": {
     "animejs": "^3.0.1",
     "core-js": "^2.6.5",
+    "fast-average-color": "^6.3.0",
     "hammerjs": "^2.0.8",
     "lodash-es": "^4.17.11",
     "vue": "^2.6.10"

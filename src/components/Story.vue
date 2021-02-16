@@ -1,12 +1,12 @@
 <template>
-  <div class="story" :style="{ background: slides[currentSlideIndex] }">
+  <div class="story">
     <div class="timeline">
       <div class="slice" v-for="(slide, i) in slides" :key="i">
         <div class="progress">&nbsp;</div>
       </div>
     </div>
     <div class="slide">
-      <p>{{ slides[currentSlideIndex] }}</p>
+      <img :src="require('../assets/' + slides[currentSlideIndex] + '.jpg')" alt="">
     </div>
   </div>
 </template>
@@ -15,6 +15,7 @@
 import anime from 'animejs/lib/anime.es.js';
 import Hammer from 'hammerjs';
 import { EventBus } from '../helpers/EventBus.js';
+import FastAverageColor from 'fast-average-color';
 
 const SLIDE_DURATION = 2000;
 
@@ -69,9 +70,23 @@ export default {
     },
     previousStory: function() {
       EventBus.$emit('PREVIOUS_STORY');
-    }
+    },
+
+    changeColor() {
+      const fac = new FastAverageColor();
+      let containers = document.querySelectorAll('.slide');
+
+      for (let i = 0; i < containers.length; i++) {
+        let container = containers[i];
+        let color = fac.getColor(container.querySelector('img'), {algorithm: 'dominant'});
+           container.style.backgroundColor = color.rgba;
+           container.style.color = color.isDark ? '#fff' : '#000';
+        }
+        }
+
   },
-  mounted() {   
+  mounted() {  
+
     let $timeline = this.$el.getElementsByClassName('timeline')[0];
 
     // Add progress bars to the timeline animation group
@@ -81,6 +96,7 @@ export default {
         width: '100%',
         changeBegin: () => {
           // Update the Vue componenet state when progress bar begins to play
+          this.changeColor()
           this.currentSlideIndex = index;
         },
         complete: () => {
@@ -88,7 +104,7 @@ export default {
           if (index === this.slides.length - 1) {
             this.nextStory();
           }
-        }
+        },
       });
     });
 
@@ -144,36 +160,37 @@ export default {
 }
 
 .timeline {
+  position: absolute;
   display: flex;
   flex-grow: 0;
   width: 100%;
+  border-radius: 5px;
 }
 
 .timeline > .slice {
-  background: rgba(0,0,0,0.25);
-  height: 10px;
-  margin: 10px;
+  background: rgba(255, 255, 255, 0.4);;
+  height: 3px;
+  margin: 10px 3px;
   width: 100%;
+  border-radius: 5px;
 }
 
 .timeline > .slice > .progress {
-  background: black;
-  height: 10px;
+  background: #fff;
+  height: 3px;
   width: 0%;
+  border-radius: 5px;
 }
 
 .slide {
-  /* Take the rest of the page */
-  flex-grow: 1; 
-
-  /* Center align */
-  display: flex;
+   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.slide p {
-  font-size: 60px;
-  opacity: .5;
-}
+.slide img {
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;
+  }
 </style>

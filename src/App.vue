@@ -18,9 +18,9 @@ export default {
     return {
       currentStoryIndex: 0,
       stories: [
-        ["#D53738", "#638867"],
-        ["#DAF7A6", "#FFC300", "#FF5733"],
-        ["#00BCD4"]
+        ["stories"],
+        ["stories4","stories3"],
+        ["stories2","stories", "stories4"],
       ]
     };
   },
